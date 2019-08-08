@@ -7,7 +7,7 @@
 - Windows 10 Home
 - Anaconda (Python 3.7 version)
 
-### 使用前準備
+### 如何使用
 
 0. 安裝[Anaconda (Python 3.7版本)](https://repo.anaconda.com/archive/Anaconda3-2019.07-Windows-x86_64.exe)，在安裝過程中請將Anaconda加入環境變數PATH裡面，在安裝過程中可以在Advanced Options當中勾選。
 
