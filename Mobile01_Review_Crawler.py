@@ -7,7 +7,7 @@ import requests
 from pandas import DataFrame
 from bs4 import BeautifulSoup
 from multiprocessing import Pool
-import datetime
+from datetime import datetime
 
 time_delta = 0
 temp_time_delta = int(input('請輸入要幾日內的回覆\n'))
@@ -47,19 +47,19 @@ def GetPageReviews(url):
     resp = list()
     
     for i in range(len(Review_list)):
-        today = datetime.datetime.now()
-        Reviews_date = datetime.datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
+        today = datetime.now()
+        Reviews_date = datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
 
         if(Review_list[i].find('article') == None):
             pass
         elif(((today - Reviews_date).days)>time_delta):
             pass
         else:
-            date = datetime.datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
-            time = datetime.datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[11:19], '%H:%M')
+            date = datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
+            time = datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[11:19], '%H:%M')
             topic = All_page_Contents.find('h2',{'class':'t2'}).text    
             review = Parse(Review_list[i].find('article').text) 
-            id = Parse(Review_list[i])
+            id = Parse(Review_list[i].find('a',{'class':'c-link c-link--gn u-ellipsis'}))
 
             resp.append({
                 'date':date,
@@ -129,7 +129,7 @@ def MoreThanOnePage(url):
 
 def Read_URL():
     url_list = list()
-    file_name = input('請輸入要讀取的txt檔(請加上附檔名)\n')
+    file_name = input('請輸入要讀取的txt檔(請加上副檔名)\n')
     file = open(file_name, 'r')
     for line in file:
         url = line.replace('\n', '').split(' ')
