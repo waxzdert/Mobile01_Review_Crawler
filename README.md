@@ -18,14 +18,7 @@
 3.  輸入並執行 ```pip install beautifulsoup4```
    
 4.  進到存放Mobile01_Review_Crawler.py爬蟲的資料夾，新增一個文字文件
-5.  打開文字文件並將想要爬取的文章頁面網址貼入文字文件中，輸入完第一個網址後要換行
-   
-    像是以下這樣
-
-    https://www.mobile01.com/topicdetail.php?f=568&t=5864034
-    https://www.mobile01.com/topicdetail.php?f=568&t=5866129
-
-    輸入完後存檔
+5.  打開文字文件並將想要爬取的文章頁面網址貼入文字文件中，輸入完第一個網址後要換行，輸入完後存檔
 
 6.  按住shift鍵並按滑鼠右鍵開啟選單，點選在這裡開啟命令提示字元或在這裡開啟PowerShell視窗
 
