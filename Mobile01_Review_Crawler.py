@@ -144,7 +144,7 @@ def main():
     topic_list = Read_URL()
     print('總共要爬 %d 篇文章' % len(topic_list))
 
-    print('===========================================\n')
+    #print('===========================================\n')
     for i in range(len(topic_list)):
         temp = MoreThanOnePage(topic_list[i])
         all_reviews_list = all_reviews_list + temp
@@ -153,7 +153,7 @@ def main():
         sys.stdout.flush()
     
     print('\n')
-    print('===========================================\n')  
+    #print('===========================================\n')  
     Save2Excel(all_reviews_list)
 
 main()
