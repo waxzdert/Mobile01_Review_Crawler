@@ -1,6 +1,6 @@
 import warnings
 warnings.filterwarnings('ignore')
-
+import sys
 import re
 import time
 import requests
@@ -142,11 +142,18 @@ def main():
     all_reviews_list = list()
     
     topic_list = Read_URL()
-    
+    print('總共要爬 %d 篇文章' % len(topic_list))
+
+    print('===========================================\n')
     for i in range(len(topic_list)):
         temp = MoreThanOnePage(topic_list[i])
         all_reviews_list = all_reviews_list + temp
         
+        sys.stdout.write("\r目前已處理 %d 篇" % (i+1))
+        sys.stdout.flush()
+    
+    print('\n')
+    print('===========================================\n')  
     Save2Excel(all_reviews_list)
 
 main()
