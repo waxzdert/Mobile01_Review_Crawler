@@ -9,10 +9,10 @@ from bs4 import BeautifulSoup
 from multiprocessing import Pool
 from datetime import datetime
 
-time_delta = 0
-temp_time_delta = int(input('請輸入要幾日內的回覆\n'))
-time_delta = temp_time_delta
-
+crawl_time_delta = 0
+temp_time_delta = int(input('請輸入要幾小時內的回覆\n'))
+crawl_time_delta = temp_time_delta*60*60
+today = datetime.now()
 
 def GetPageContent(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
@@ -43,19 +43,23 @@ def Parse(content):
 def GetPageReviews(url):
     All_page_Contents = GetPageContent(url)
     Review_list = All_page_Contents.find_all('div',{'class':'l-articlePage'})
-
+    
     Main_post_week = datetime.strptime((Review_list[0].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
     main_week_num = Main_post_week.date().isocalendar()[1]
 
     resp = list()
     
     for i in range(len(Review_list)):
-        today = datetime.now()
-        Reviews_date = datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
 
+        Reviews_date = datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:19], '%Y-%m-%d %H:%M')
+        # print(Reviews_date)
+        time_delta = today - Reviews_date
+        review_delta = int(time_delta.total_seconds())
+        #print(review_delta)
+        #print('%f,%d'% (review_delta, crawl_time_delta))
         if(Review_list[i].find('article') == None):
             pass
-        elif(((today - Reviews_date).days)>time_delta):
+        elif(review_delta > crawl_time_delta):
             pass
         else:
             date = datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
@@ -69,7 +73,6 @@ def GetPageReviews(url):
                 post_week = ''
             else:
                 post_week = 'V'
-
 
             resp.append({
                 'post_week':post_week,
