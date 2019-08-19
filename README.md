@@ -38,7 +38,8 @@
 
 如果你遇到其他問題可以[email](mailto:waxzdert16@gmail.com)給我，或是可以再Github上提出issue。
 
-
+如果覺得太複雜想要下載Windows環境下的執行檔，在以下連結
+### [點此下載](https://1drv.ms/u/s!AnpCan97hiTanVdap0y1iMeiVNkQ?e=OjfYEv)
 
 
 
