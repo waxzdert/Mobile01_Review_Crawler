@@ -44,6 +44,9 @@ def GetPageReviews(url):
     All_page_Contents = GetPageContent(url)
     Review_list = All_page_Contents.find_all('div',{'class':'l-articlePage'})
 
+    Main_post_week = datetime.strptime((Review_list[0].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
+    main_week_num = Main_post_week.date().isocalendar()[1]
+
     resp = list()
     
     for i in range(len(Review_list)):
@@ -60,8 +63,16 @@ def GetPageReviews(url):
             topic = All_page_Contents.find('h2',{'class':'t2'}).text    
             review = Parse(Review_list[i].find('article').text) 
             id = Parse(Review_list[i].find('a',{'class':'c-link c-link--gn u-ellipsis'}))
+            post_week_num = date.date().isocalendar()[1]
+
+            if(main_week_num < post_week_num):
+                post_week = ''
+            else:
+                post_week = 'V'
+
 
             resp.append({
+                'post_week':post_week,
                 'date':date,
                 'time':time,
                 'topic':topic,
@@ -69,10 +80,12 @@ def GetPageReviews(url):
                 'id':id,
                 'url':url
             })
+            #print(resp)
         
     return resp
 
 def Save2Excel(posts):
+    post_week = [entry['post_week'] for entry in posts]
     topics = [entry['topic'] for entry in posts]
     links = [entry['url'] for entry in posts]
     dates = [entry['date'] for entry in posts]
@@ -80,6 +93,7 @@ def Save2Excel(posts):
     authors = [entry['id'] for entry in posts]
     contents = [entry['review'] for entry in posts]
     df = DataFrame({
+        '發文周':post_week,
         '主題':topics,
         'URL':links,
         '日期': dates,
