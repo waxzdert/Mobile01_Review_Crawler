@@ -64,7 +64,7 @@ def GetPageReviews(url):
         else:
             date = datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
             time = datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[11:19], '%H:%M')
-            topic = All_page_Contents.find('h2',{'class':'t2'}).text    
+            topic = All_page_Contents.find('h1',{'class':'t2'}).text    
             review = Parse(Review_list[i].find('article').text) 
             id = Parse(Review_list[i].find('a',{'class':'c-link c-link--gn u-ellipsis'}))
             post_week_num = date.date().isocalendar()[1]
