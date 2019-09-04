@@ -15,20 +15,21 @@ from datetime import datetime
 #crawl_time_delta = temp_time_delta*60*60
 #today = datetime.now()
 print('\n=============================================\n')
-year_max=int(input('請輸入最大年 : '))
-month_max=int(input('請輸入最大月 : '))
-day_max=int(input('請輸入最大日 : '))
-hour_max=int(input('請輸入最大時 : '))
-minute_max=int(input('請輸入最大分 : '))
-print('\n=============================================\n')
 year_min=int(input('請輸入最小年 : '))
 month_min=int(input('請輸入最小月 : '))
 day_min=int(input('請輸入最小日 : '))
 hour_min=int(input('請輸入最小時 : '))
 minute_min=int(input('請輸入最小分 : '))
 print('\n=============================================\n')
+year_max=int(input('請輸入最大年 : '))
+month_max=int(input('請輸入最大月 : '))
+day_max=int(input('請輸入最大日 : '))
+hour_max=int(input('請輸入最大時 : '))
+minute_max=int(input('請輸入最大分 : '))
+print('\n=============================================\n')
 
-print('爬取時間範圍：%d/%d/%d %d:%d 至 %d/%d/%d %d:%d\n' % (year_max,month_max,day_max,hour_max,minute_max,year_min,month_min,day_min,hour_min,minute_min))
+
+print('爬取時間範圍：%d/%d/%d %d:%d 至 %d/%d/%d %d:%d\n' % (year_min,month_min,day_min,hour_min,minute_min,year_max,month_max,day_max,hour_max,minute_max))
 
 time_uplimit = datetime(year=year_max,month=month_max,day=day_max,hour=hour_max,minute=minute_max)
 time_underlimit = datetime(year=year_min,month=month_min,day=day_min,hour=hour_min,minute=minute_min)
@@ -80,9 +81,9 @@ def GetPageReviews(url):
 
         if(Review_list[i].find('article') == None):
             pass
-        elif(Main_post_time < time_uplimit):
+        elif(Main_post_time > time_uplimit):
             pass
-        elif(Main_post_time > time_underlimit):
+        elif(Main_post_time < time_underlimit):
             pass
         else:
             date = datetime.strptime((Review_list[i].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
@@ -106,7 +107,7 @@ def GetPageReviews(url):
                 'id':id,
                 'url':url
             })
-            #print(resp)
+            
         
     return resp
 
