@@ -29,7 +29,7 @@ minute_max=int(input('請輸入最大分 : '))
 print('\n=============================================\n')
 
 
-print('爬取時間範圍：%d/%d/%d %d:%d 至 %d/%d/%d %d:%d\n' % (year_min,month_min,day_min,hour_min,minute_min,year_max,month_max,day_max,hour_max,minute_max))
+print('爬取時間範圍：%s 至 %s\n' % (time_uplimit.strftime('%Y/%m/%d %H:%M'),time_underlimit.strftime('%Y/%m/%d %H:%M')))
 
 time_uplimit = datetime(year=year_max,month=month_max,day=day_max,hour=hour_max,minute=minute_max)
 time_underlimit = datetime(year=year_min,month=month_min,day=day_min,hour=hour_min,minute=minute_min)
