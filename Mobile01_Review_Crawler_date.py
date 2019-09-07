@@ -29,11 +29,10 @@ minute_max=int(input('請輸入最大分 : '))
 print('\n=============================================\n')
 
 
-print('爬取時間範圍：%s 至 %s\n' % (time_uplimit.strftime('%Y/%m/%d %H:%M'),time_underlimit.strftime('%Y/%m/%d %H:%M')))
-
 time_uplimit = datetime(year=year_max,month=month_max,day=day_max,hour=hour_max,minute=minute_max)
 time_underlimit = datetime(year=year_min,month=month_min,day=day_min,hour=hour_min,minute=minute_min)
 
+print('爬取時間範圍：%s 至 %s\n' % (time_underlimit.strftime('%Y/%m/%d %H:%M'),time_uplimit.strftime('%Y/%m/%d %H:%M')))
 
 def GetPageContent(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
@@ -62,12 +61,17 @@ def Parse(content):
     return content
 
 def GetPageReviews(url):
+    open_review = ''
     All_page_Contents = GetPageContent(url)
     Review_list = All_page_Contents.find_all('div',{'class':'l-articlePage'})
     
-    Main_post_week = datetime.strptime((Review_list[0].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
-    main_week_num = Main_post_week.date().isocalendar()[1]
-
+    #Main_post_week = datetime.strptime((Review_list[0].find('span',{'class':'o-fNotes o-fSubMini'})).text[0:10], '%Y-%m-%d')
+    #main_week_num = Main_post_week.date().isocalendar()[1]
+    if(str(type(Review_list[0].find('article'))) == '<class \'NoneType\'>'):
+        pass
+    else:
+        open_review = Parse(Review_list[0].find('article').text)
+    #print(open_review)
     resp = list()
 
     for i in range(len(Review_list)):
@@ -78,6 +82,8 @@ def GetPageReviews(url):
         #review_delta = int(time_delta.total_seconds())
         #print(review_delta)
         #print('%f,%d'% (review_delta, crawl_time_delta))
+        
+
 
         if(Review_list[i].find('article') == None):
             pass
@@ -91,14 +97,16 @@ def GetPageReviews(url):
             topic = All_page_Contents.find('h1',{'class':'t2'}).text    
             review = Parse(Review_list[i].find('article').text) 
             id = Parse(Review_list[i].find('a',{'class':'c-link c-link--gn u-ellipsis'}))
-            post_week_num = date.date().isocalendar()[1]
-
-            if(main_week_num < post_week_num):
-                post_week = ''
+            post_week = 'W' + str(date.date().isocalendar()[1])
+            
+                
+            if(review == open_review):
+                open_check = 'V'
             else:
-                post_week = 'V'
+                open_check = ''
 
             resp.append({
+                'open':open_check,
                 'post_week':post_week,
                 'date':date,
                 'time':time,
@@ -112,6 +120,7 @@ def GetPageReviews(url):
     return resp
 
 def Save2Excel(posts):
+    open_check = [entry['open'] for entry in posts]
     post_week = [entry['post_week'] for entry in posts]
     topics = [entry['topic'] for entry in posts]
     links = [entry['url'] for entry in posts]
@@ -120,6 +129,7 @@ def Save2Excel(posts):
     authors = [entry['id'] for entry in posts]
     contents = [entry['review'] for entry in posts]
     df = DataFrame({
+        '開文':open_check,
         '發文周':post_week,
         '主題':topics,
         'URL':links,
@@ -133,9 +143,8 @@ def Save2Excel(posts):
     
     final_name = output_name + '.xlsx'
     
-    df.to_excel(final_name, sheet_name='sheet1', index=False, columns=['發文周','日期','時間','Series','主題','id','留言',
-                                                                        '留言好感度','留言Feature','URL','留言型號','非競品品牌',
-                                                                        '非競品型號','文章好感度','文章feature'])
+    df.to_excel(final_name, sheet_name='sheet1', index=False, columns=['開文','發文周','日期','時間','Series','主題','id','留言',
+                                                                        '留言好感度','留言Feature','URL','留言型號'])
 
 def GetTotalPage(url):
 
@@ -183,7 +192,7 @@ def main():
     all_reviews_list = list()
     
     topic_list = Read_URL()
-    print('總共要爬 %d 篇文章' % len(topic_list))
+    print('\n總共要爬 %d 篇文章' % len(topic_list))
 
     #print('===========================================\n')
     for i in range(len(topic_list)):
